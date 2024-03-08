@@ -1,0 +1,63 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                        AccountInfoEA.mq5        |
+//|                      Copyright 2021, Forex Robot Easy Team        |
+//|                                         forexroboteasy.com       |
+//+------------------------------------------------------------------+
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+    ChartSetInteger(0, CHART_SHOW_TRADE_LEVELS, false); // Hide trade levels on the chart
+    return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+    ChartSetInteger(0, CHART_SHOW_TRADE_LEVELS, true); // Show trade levels on the chart
+}
+
+//+------------------------------------------------------------------+
+//| Expert tick function                                             |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+    // Get the total number of positions in the account
+    int totalPositions = PositionsTotal();
+
+    // Loop through each position
+    for (int i = 0; i < totalPositions; i++)
+    {
+        // Get the position ticket number
+        ulong ticket = PositionGetTicket(i);
+
+        // Get the position symbol
+        string symbol = PositionGetString(POSITION_SYMBOL);
+
+        // Get the position type (buy or sell)
+        ENUM_POSITION_TYPE positionType = PositionGetInteger(POSITION_TYPE);
+
+        // Get the position volume
+        double volume = PositionGetDouble(POSITION_VOLUME);
+
+        // Get the position open price
+        double openPrice = PositionGetDouble(POSITION_PRICE_OPEN);
+
+        // Get the position stop loss level
+        double stopLoss = PositionGetDouble(POSITION_SL);
+
+        // Get the position take profit level
+        double takeProfit = PositionGetDouble(POSITION_TP);
+
+        // Get the position profit
+        double profit = PositionGetDouble(POSITION_PROFIT);
+
+        // Print the position details on the chart
+        Print('Ticket: ', ticket, ', Symbol: ', symbol, ', Type: ', positionType, ', Volume: ', volume, ', Open Price: ', openPrice, ', Stop Loss: ', stopLoss, ', Take Profit: ', takeProfit, ', Profit: ', profit);
+    }
+}
